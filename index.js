@@ -1,86 +1,87 @@
 
+//Assigns the value 
 function Quiz(questions) {
   this.score = 0;
   this.questions = questions;
   this.questionIndex = 0;
 }
-
-Quiz.prototype.getQuestionByIndex = function() {
+//Returns question for a particular index
+Quiz.prototype.getQuestionByIndex = function () {
   return this.questions[this.questionIndex];
 }
-
-Quiz.prototype.checkOptionWithAnswer = function(answer) {
-  if(this.getQuestionByIndex().isCorrectAnswer(answer)) {
-      this.score++;
+//Function adds the score by 1
+Quiz.prototype.checkOptionWithAnswer = function (answer) {
+  if (this.getQuestionByIndex().isCorrectAnswer(answer)) {
+    this.score++;
   }
 
   this.questionIndex++;
 }
-
-Quiz.prototype.isEnded = function() {
+//Function checks whether it reached final question
+Quiz.prototype.isEnded = function () {
   return this.questionIndex === this.questions.length;
 }
 
-
+//Function sets the question, choices and answer
 function Question(text, choices, answer) {
   this.text = text;
   this.choices = choices;
   this.answer = answer;
 }
-
-Question.prototype.isCorrectAnswer = function(choice) {
+//Checks the option selected by the user
+Question.prototype.isCorrectAnswer = function (choice) {
   return this.answer === choice;
 }
 
-
+//Function loads the question
 function loadQuestions() {
-  if(quiz.isEnded()) {
-      showScores();
+  if (quiz.isEnded()) {
+    showScores();
   }
   else {
-      // show question
-      var element = document.getElementById("question");
-      element.innerHTML = quiz.getQuestionByIndex().text;
+    // show question
+    var element = document.getElementById("question");
+    element.innerHTML = quiz.getQuestionByIndex().text;
 
-      // show options
-      var choices = quiz.getQuestionByIndex().choices;
-      for(var i = 0; i < choices.length; i++) {
-          var element = document.getElementById("choice" + i);
-          element.innerHTML = choices[i];
-          handleOptionButton("btn" + i, choices[i]);
-      }
+    // show options
+    var choices = quiz.getQuestionByIndex().choices;
+    for (var i = 0; i < choices.length; i++) {
+      var element = document.getElementById("choice" + i);
+      element.innerHTML = choices[i];
+      handleOptionButton("btn" + i, choices[i]);
+    }
 
-      showProgress();
+    showProgress();
   }
 };
-
+//This function handles the button clicked event
 function handleOptionButton(id, choice) {
   var button = document.getElementById(id);
-  button.onclick = function() {
-      quiz.checkOptionWithAnswer(choice);
-      loadQuestions();
+  button.onclick = function () {
+    quiz.checkOptionWithAnswer(choice);
+    loadQuestions();
   }
 };
 
-
+//This function shows the progress x of y
 function showProgress() {
   var currentQuestionNumber = quiz.questionIndex + 1;
   var element = document.getElementById("progress");
   element.innerHTML = "Question " + currentQuestionNumber + " of " + quiz.questions.length;
 };
-
+//This functions shows the final score
 function showScores() {
   var gameOverHTML = "<h1>Result</h1>";
-  gameOverHTML += "<h2 id='score'> Your scores: " + quiz.score + ".And mark percentage is: "+(quiz.score/questions.length*100)+"%"+"</h2>";
+  gameOverHTML += "<h2 id='score'> Your scores: " + quiz.score + ".And mark percentage is: " + (quiz.score / questions.length * 100) + "%" + "</h2>";
   var element = document.getElementById("quiz");
   element.innerHTML = gameOverHTML;
 };
 
-// create questions here
+// Add as many questions in the array of objects
 var questions = [
-  new Question("JavaScript supports", ["Functions", "XHTML","CSS", "HTML"], "Functions"),
+  new Question("JavaScript supports", ["Functions", "XHTML", "CSS", "HTML"], "Functions"),
   new Question("Which language is used for styling web pages?", ["HTML", "JQuery", "CSS", "XML"], "CSS"),
-  new Question("Which is not a JavaScript Framework?", ["Python Script", "JQuery","Django", "NodeJS"], "Django"),
+  new Question("Which is not a JavaScript Framework?", ["Python Script", "JQuery", "Django", "NodeJS"], "Django"),
   new Question("Which is used for Connect To Database?", ["PHP", "HTML", "JS", "All"], "PHP"),
   new Question("JavaScript is a ", ["Language", "Programming Language", "Development", "All"], "Programming Language")
 ];
